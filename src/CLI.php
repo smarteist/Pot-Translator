@@ -24,7 +24,7 @@ class CLI
         $anyError = [];
 
         // matches args in form of => command
-        $command = preg_grep('/^([a-zA-Z]+)/', $argv);
+        $command = preg_grep('/(^[^-].*)/', $argv);
         // matches args in form of => --option
         $dashDashes = preg_grep('/^--([a-z]+)/', $argv);
         // matches args in form of => -option:value or -option
@@ -69,7 +69,7 @@ class CLI
 
         if (isset($command[0])) {
             try {
-                $called = (new ReflectionMethod($this, $command[0]))->invoke($this, $argv);
+                $called = (new ReflectionMethod($this, $command[0]))->invoke($this, $command);
                 if ($called) return;
             } catch (ReflectionException $e) {
                 $anyError[] = CLIStr::create("* No such command!")->setColors('green');
@@ -182,16 +182,16 @@ class CLI
         $this->dashVersion();
     }
 
-    public function translate($argv)
+    public function translate($args)
     {
         $anyError = [];
-        $file = array_pop($argv);
+        $file = array_pop($args);
         if (!is_file($file)) {
             $anyError[] = CLIStr::create("* File not found, please enter valid file address.")->setColors('green');
             $anyError[] = CLIStr::create("")->setColors('green');
         }
-        $to = array_pop($argv);
-        $from = array_pop($argv);
+        $to = array_pop($args);
+        $from = array_pop($args);
         if (!$to | !$from) {
             $anyError[] = CLIStr::create("* Please Enter Source and Destination Language code .")->setColors('green');
             $anyError[] = CLIStr::create("You specify target languages by using their ISO - 639 - 1 codes .")->setColors('green');
@@ -263,10 +263,10 @@ class CLI
 
     }
 
-    public function compile($argv)
+    public function compile($args)
     {
         $anyError = [];
-        $file = array_pop($argv);
+        $file = array_pop($args);
         if (!is_file($file)) {
             $anyError[] = CLIStr::create("* File not found, please enter valid file address.")->setColors('green');
             $anyError[] = CLIStr::create("")->setColors('green');
