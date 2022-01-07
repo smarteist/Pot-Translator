@@ -53,6 +53,17 @@ class CLI
             }
         }
 
+        if (isset($command[0])) {
+            try {
+                (new ReflectionMethod($this, $command[0]))->invoke($this, $command);
+                return;
+            } catch (ReflectionException $e) {
+                $anyError[] = CLIStr::create("* No such command!")->setColors('green');
+                $anyError[] = CLIStr::create("")->setColors('green');
+                $anyError[] = CLIStr::create("The \"" . (isset($command[0]) ? $command[0] : '') . "\" is an invalid command.")->setColors('green');
+            }
+        }
+
         if (!empty($anyError)) {
             $anyError[] = CLIStr::create()->setColors('green');
             $anyError[] = CLIStr::create('More help? please run "php pomo --help"')->setColors('green');
@@ -66,28 +77,6 @@ class CLI
                 CLIStr::create('Error!')->setColors('red')
             );
         }
-
-        if (isset($command[0])) {
-            try {
-                $called = (new ReflectionMethod($this, $command[0]))->invoke($this, $command);
-                if ($called) return;
-            } catch (ReflectionException $e) {
-                $anyError[] = CLIStr::create("* No such command!")->setColors('green');
-                $anyError[] = CLIStr::create("")->setColors('green');
-                $anyError[] = CLIStr::create("The \"" . (isset($command[0]) ? $command[0] : '') . "\" is an invalid command.")->setColors('green');
-            }
-        }
-
-        $anyError[] = CLIStr::create('Need help? please run "php pomo --help"')->setColors('green');
-
-        echo (new CLIBox([
-            'tableColor' => 'red',
-            'align' => 'center',
-            'theme' => 3,
-        ]))->getBox($anyError,
-            CLIStr::create("Error!")->setColors('red'),
-            CLIStr::create(' POMO Translator ' . \Composer\InstalledVersions::getRootPackage()['pretty_version'] . ' ')->setColors('red')
-        );
     }
 
     public function dashDelay($delay)
