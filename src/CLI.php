@@ -76,6 +76,8 @@ class CLI
                 $anyError,
                 CLIStr::create('Error!')->setColors('red')
             );
+        } else {
+            $this->dashDashHelp();
         }
     }
 
