@@ -221,8 +221,8 @@ class CLI
 
                 if ($this->options['echo']) {
                     CLIStr::consoleWrite(
-                        CLIStr::create($text)->setColors('black', 'cyan')
-                        . CLIStr::create(' ➤➤translated to➤➤ ')->setColors('green')
+                        CLIStr::create($text)->setColors('black', 'cyan') . PHP_EOL
+                        . CLIStr::create(' ➤➤translated to➤➤ ')->setColors('green') . PHP_EOL
                         . CLIStr::create($translated)->setColors('black', 'green')
                         , true);
                 }
