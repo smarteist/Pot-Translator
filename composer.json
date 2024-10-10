@@ -5,8 +5,8 @@
   "require": {
     "ext-curl": "*",
     "ext-json": "*",
-    "gettext/gettext": "^5.5",
-    "stichoza/google-translate-php": "^4.1"
+    "gettext/gettext": "^5.7",
+    "stichoza/google-translate-php": "^5.2"
   },
   "license": "MIT",
   "authors": [
